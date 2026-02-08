@@ -132,12 +132,12 @@
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/ravikumarxworkz/hospital-management-system.git
+    git clone https://github.com/anujj07/Hospital-Management-System-.git
    ```
 
 2. **Database Setup**:
-   - Import the SQL script to initialize the MySQL/PostgreSQL database.
-   - Configure the `dbconfig.properties` file with your database connection details.
+ Import the SQL script to initialize the MySQL/PostgreSQL database.
+Configure the dbconfig.properties file with your database connection details.
 
 3. **Build and Deploy**:
    - Use Maven to build the project.
