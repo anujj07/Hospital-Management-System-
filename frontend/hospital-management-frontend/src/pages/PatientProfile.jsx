@@ -34,24 +34,28 @@ function PatientProfile() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Fetch patient data from the backend using the service function
-  const getPatientData = async () => {
-    try {
-      const data = await fetchPatientDetails();
-      setUserData(data);
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching patient data:", err);
-      setError("Failed to load patient data. Please log in again.");
-      sessionStorage.clear();
-      navigate("/LifeBridgeHospital/login");
-    }
-  };
+  useEffect(() => {
+    let mounted = true;
+    const fetchPatient = async () => {
+      try {
+        const data = await fetchPatientDetails();
+        if (!mounted) return;
+        setUserData(data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching patient data:", err);
+        if (!mounted) return;
+        setError("Failed to load patient data. Please log in again.");
+        sessionStorage.clear();
+        navigate("/login");
+      }
+    };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-useEffect(() => {
-  getPatientData();
-}, []);
+    fetchPatient();
+    return () => {
+      mounted = false;
+    };
+  }, [navigate]);
 
 
   const handleSidebarClick = (component) => {

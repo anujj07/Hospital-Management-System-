@@ -37,23 +37,28 @@ function AdminProfile() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Fetch admin data
-  const getAdminData = async () => {
-    try {
-      const data = await fetchAdminData();
-      setUserData(data);
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching admin data:", err);
-      setError("Failed to load admin data. Please log in again.");
-      sessionStorage.clear();
-      navigate("/login");
-    }
-  };
-
   useEffect(() => {
-    getAdminData();
-  }, []);
+    let mounted = true;
+    const fetchAdmin = async () => {
+      try {
+        const data = await fetchAdminData();
+        if (!mounted) return;
+        setUserData(data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching admin data:", err);
+        if (!mounted) return;
+        setError("Failed to load admin data. Please log in again.");
+        sessionStorage.clear();
+        navigate("/login");
+      }
+    };
+
+    fetchAdmin();
+    return () => {
+      mounted = false;
+    };
+  }, [navigate]);
 
   const handleSidebarClick = (component) => {
     setActiveComponent(component);
