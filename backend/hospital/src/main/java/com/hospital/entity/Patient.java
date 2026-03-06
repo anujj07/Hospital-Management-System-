@@ -51,14 +51,9 @@ public class Patient {
 
    
     private String country;
-
-    @Column(nullable = false)
-    private String password; // This should be encrypted using BCrypt
-
     @CreationTimestamp
     private LocalDateTime registrationDate;
 
     @Column(nullable = false)
     private boolean isActive = true;
 }
-

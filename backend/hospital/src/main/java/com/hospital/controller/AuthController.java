@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hospital.dto.request.LoginRequest;
 import com.hospital.security.JwtTokenUtil;
-import com.hospital.service.PatientService;
 
 @RestController
 public class AuthController {
@@ -34,20 +33,13 @@ public class AuthController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private PatientService patientService;
-
     @PostMapping("/api/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
-        
-        System.err.println("Attempting to authenticate user with email: {}"+ email);
-        System.err.println("Received password (masked):{}"+ password);
 
         // Logging input credentials
         logger.info("Attempting to authenticate user with email: {}", email);
-        logger.info("Received password (masked): {}", password != null ? "[PROVIDED]" : "[NOT PROVIDED]");
 
         // Validate input
         if (email == null || email.isEmpty() || password == null || password.isEmpty()) {

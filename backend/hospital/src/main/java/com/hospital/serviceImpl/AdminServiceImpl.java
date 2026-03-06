@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.hospital.dto.response.AdminResponse;
 import com.hospital.entity.Admin;
 import com.hospital.repository.AdminRepository;
+import com.hospital.exception.ResourceNotFoundException;
 import com.hospital.service.AdminService;
 
 @Service
@@ -18,9 +19,12 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public AdminResponse getAdminData(String email) {
 		Admin admin = this.adminRepository.findByEmail(email);
+		if (admin == null) {
+			throw new ResourceNotFoundException("Admin not found with email: " + email);
+		}
 		AdminResponse adminResponse = new AdminResponse();
 		BeanUtils.copyProperties(admin, adminResponse);
-		return adminResponse != null ? adminResponse : null;
+		return adminResponse;
 	}
 
 }

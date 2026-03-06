@@ -43,7 +43,6 @@ function LoginPage() {
     try {
       // Send login request to the backend
       const response = await loginUser(credentials);
-      console.log("Login response:", response);
       if (isTokenExpired(response.token)) {
         setMessage("Session Expired. Please login again.");
         return;
@@ -57,8 +56,6 @@ function LoginPage() {
 
       // Store the token in sessionStorage
       sessionStorage.setItem("token", response.token);
-
-      console.log("Login successful:", response);
 
       // Role-based navigation using a dictionary
       const roleRoutes = {

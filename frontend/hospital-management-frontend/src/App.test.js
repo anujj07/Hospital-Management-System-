@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import Navbar from './components/home/Navbar';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('renders navbar with site title', () => {
+  render(<Navbar />);
+  const titleElement = screen.getByText(/LifeBridge Hospital/i);
+  expect(titleElement).toBeInTheDocument();
 });

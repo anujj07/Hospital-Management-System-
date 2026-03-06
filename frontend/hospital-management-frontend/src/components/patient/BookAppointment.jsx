@@ -77,7 +77,7 @@ const BookAppointment = () => {
       }
       setSuccess('Appointment booked successfully!');
       setTimeout(() => {
-        navigate('/view-appointments');
+        navigate('/patient/profile');
       }, 2000);
     } catch (err) {
       setError(err?.response?.data?.message || 'Failed to book appointment');

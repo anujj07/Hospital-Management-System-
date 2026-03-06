@@ -1,5 +1,30 @@
 import axiosInstance from "../api/axiosConfig";
 
+const isMockSession = () =>
+  sessionStorage.getItem("token")?.endsWith(".mock-signature");
+
+const mockDoctors = [
+  {
+    doctorId: 201,
+    firstName: "John",
+    lastName: "Doe",
+    email: "doctor1@demo.com",
+    phoneNumber: "9000000001",
+    specialization: "Cardiology",
+    bloodGroup: "A+",
+    joiningDate: "2022-08-10",
+  },
+  {
+    doctorId: 202,
+    firstName: "Priya",
+    lastName: "Sharma",
+    email: "doctor2@demo.com",
+    phoneNumber: "9000000002",
+    specialization: "Dermatology",
+    bloodGroup: "B+",
+    joiningDate: "2021-03-22",
+  },
+];
 
 export const loginDoctor = async (doctorData) => {
   try {
@@ -30,6 +55,9 @@ export const fetchDoctorDetails=async()=>{
 
 
 export const fetchAllDoctors = async () => {
+  if (isMockSession()) {
+    return mockDoctors;
+  }
   try {
     const response = await axiosInstance.get('/api/doctors/fetchAllDoctors');
     return response.data;

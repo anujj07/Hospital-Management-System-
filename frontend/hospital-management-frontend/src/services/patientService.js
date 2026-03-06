@@ -1,5 +1,49 @@
 import axiosInstance from "../api/axiosConfig";
 
+const isMockSession = () =>
+  sessionStorage.getItem("token")?.endsWith(".mock-signature");
+
+const mockPatientDetails = {
+  patientId: 1001,
+  firstName: "Demo",
+  lastName: "Patient",
+  email: "test@demo.com",
+  phoneNumber: "9999999999",
+  gender: "Other",
+  dateOfBirth: "1998-01-01",
+  city: "Bengaluru",
+  state: "Karnataka",
+  country: "India",
+};
+
+const mockPatients = [
+  mockPatientDetails,
+  {
+    patientId: 1002,
+    firstName: "Asha",
+    lastName: "Verma",
+    email: "asha@demo.com",
+    phoneNumber: "8888888888",
+    gender: "Female",
+    dateOfBirth: "1994-05-14",
+    city: "Pune",
+    state: "Maharashtra",
+    country: "India",
+  },
+  {
+    patientId: 1003,
+    firstName: "Rohan",
+    lastName: "Mehta",
+    email: "rohan@demo.com",
+    phoneNumber: "7777777777",
+    gender: "Male",
+    dateOfBirth: "1992-11-23",
+    city: "Ahmedabad",
+    state: "Gujarat",
+    country: "India",
+  },
+];
+
 // Register a new patient
 export const registerPatient = async (patientData) => {
   try {
@@ -39,6 +83,9 @@ export const updatePatient = async (email, patientData) => {
 };
 
 export const fetchPatientDetails = async () => {
+  if (isMockSession()) {
+    return mockPatientDetails;
+  }
   try {
     const response = await axiosInstance.get("/api/patients/mydetails");
     return response.data;
@@ -68,6 +115,9 @@ export const fetchPatientByEmail = async (email) => {
 
 // Fetch all patients
 export const fetchAllPatients = async () => {
+  if (isMockSession()) {
+    return mockPatients;
+  }
   try {
     const response = await axiosInstance.get('/api/patients/fetchAllPatients');
     return response.data;

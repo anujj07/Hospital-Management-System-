@@ -33,9 +33,14 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // Handle Unauthorized error (401) and other errors
     if (error.response && error.response.status === 401) {
+      const token = sessionStorage.getItem("token");
+      const isMockToken = token && token.endsWith(".mock-signature");
+      if (isMockToken) {
+        return Promise.reject(error);
+      }
       console.error("Unauthorized! Please log in again.");
       // Optionally, redirect to login page
-      window.location.href = "LifeBridgeHospital/login";
+      window.location.href = "/LifeBridgeHospital/login";
     }
     return Promise.reject(error);
   }

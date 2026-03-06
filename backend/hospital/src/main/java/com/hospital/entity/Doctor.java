@@ -48,10 +48,6 @@ public class Doctor {
 	@NotBlank(message = "Country is required")
 	private String country;
 
-	@NotBlank(message = "Password is required")
-	@Size(min = 8, message = "Password must be at least 8 characters long")
-	private String password;
-
 	@NotNull(message = "Joining date is required")
 	private LocalDate joiningDate;
 

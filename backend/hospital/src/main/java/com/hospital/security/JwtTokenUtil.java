@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -16,16 +17,21 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtTokenUtil {
-    private static final String BASE64_SECRET_KEY = "4MkRBHR5CZKivdaSi2NZH80wZLH92UquPLB8Hthe3iis+KKgOi6Sp5ZcmqXqLOw0E6V4007FX60PiU313fxYng==";
-    private final Key secretKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(BASE64_SECRET_KEY));
-    private static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60 * 1000; // 24 hours
+    private final Key secretKey;
+    private final long jwtTokenValidity;
+
+    public JwtTokenUtil(@Value("${jwt.secret}") String base64SecretKey,
+            @Value("${jwt.expiration.ms:86400000}") long jwtTokenValidity) {
+        this.secretKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(base64SecretKey));
+        this.jwtTokenValidity = jwtTokenValidity;
+    }
 
     public String generateToken(UserDetails userDetails, String role) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .claim("role", role) // Store single role as string
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtTokenValidity))
                 .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
     }

@@ -14,6 +14,7 @@ import com.hospital.entity.User;
 import com.hospital.exception.CustomInternalServerException;
 import com.hospital.exception.EmailAlreadyExistsException;
 import com.hospital.repository.DoctorRepository;
+import com.hospital.exception.ResourceNotFoundException;
 import com.hospital.service.DoctorService;
 import com.hospital.service.UserService;
 
@@ -55,7 +56,8 @@ public class DoctorServiceimpl implements DoctorService {
 	}
 
 	public DoctorResponse fetchDoctorByEmail(String email) {
-		Doctor doctor = doctorRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Doctor not found"));
+		Doctor doctor = doctorRepository.findByEmail(email)
+				.orElseThrow(() -> new ResourceNotFoundException("Doctor not found with email: " + email));
 		return convertToResponse(doctor);
 	}
 
@@ -81,12 +83,10 @@ public class DoctorServiceimpl implements DoctorService {
 //	}
 
 	public boolean deleteDoctor(String email) {
-		Doctor doctor = doctorRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Doctor not found"));
-		if (doctor != null) {
-			doctorRepository.delete(doctor);
-			return true;
-		}
-		return false;
+		Doctor doctor = doctorRepository.findByEmail(email)
+				.orElseThrow(() -> new ResourceNotFoundException("Doctor not found with email: " + email));
+		doctorRepository.delete(doctor);
+		return true;
 	}
 
 	private DoctorResponse convertToResponse(Doctor doctor) {
@@ -109,7 +109,8 @@ public class DoctorServiceimpl implements DoctorService {
 
 	@Override
 	public DoctorResponse updateDoctor(String email, DoctorResponse request) {
-		Doctor doctor = doctorRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Doctor not found"));
+		Doctor doctor = doctorRepository.findByEmail(email)
+				.orElseThrow(() -> new ResourceNotFoundException("Doctor not found with email: " + email));
 
 		// Update fields
 		doctor.setFirstName(request.getFirstName());
